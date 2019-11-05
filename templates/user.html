@@ -1,0 +1,27 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#viewgistlist").change(function() {
+      if ($("#viewgistlist").val() != "NONE") {
+        $("#progressbar").show();
+        var viewgistreq = $.ajax({
+          url: "/viewgist/",
+          method: "POST",
+          data: { gistname: $("#viewgistlist").val(), gistuser: $("#currentgistuser").val() }
+        }).done(function(data) {
+          $("#progressbar").hide();
+          $("#pagetarget").html(data);
+        });
+      }
+    });
+  });
+</script>
+<input type="hidden" value="{{ gituser }}" id="currentgistuser"/>
+
+<div style="text-align:center;">
+<select id="viewgistlist">
+<option value="NONE">Select one of {{ gituser }}'s Gists</option>
+{% for thisgist in gistlist %}
+<option value="{{ thisgist }}">{{ thisgist }}</option>
+{% endfor %}
+</select>
+</div>

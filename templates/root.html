@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head>
+  <title>gist-client root</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="assets/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#gituserselect").change(function() {
+          if ($("#gituserselect").val() != "NONE") {
+            $("#progressbar").show();
+            var gistuser = $("#gituserselect").val();
+            $("#gituserselect").val("NONE");
+            var olduserreq = $.ajax({
+              url: "/getgistlist/",
+              method: "POST",
+              data: { gituserfield: gistuser}
+            }).done(function(data){ 
+              $("#progressbar").hide();
+              $("#pagetarget").html(data);
+              $("#gituserselect").val("NONE");
+            });
+          }
+        });
+        
+        $("#viewnewuser").click(function() {
+          if ($("#gituserfield").val() != "") {
+            $("#progressbar").show();
+            var newuserreq = $.ajax({
+              url: "/getgistlist/",
+              method: "POST",
+              data: { gituserfield: $("#gituserfield").val()}
+            }).done(function(data){
+              $("#progressbar").hide();
+              $("#pagetarget").html(data);
+            });
+          } else {
+            alert("Type username or select form dropdown");
+          }
+        });
+      });
+    </script>
+    <style>
+      div.container {
+	border-radius: 25px;
+        width: 90%;
+        border: 1px solid gray;
+        margin: auto;
+      }
+
+      div header {
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;
+      }
+
+      div footer {
+        border-bottom-left-radius: 25px;
+        border-bottom-right-radius: 25px;
+      }
+
+      div header, div footer {
+        padding: 1em;
+        color: white;
+	background-color: #666666;  
+	  clear: left;
+        text-align: center;
+      }
+      
+      footer a {
+      	color: white;
+        text-decoration: none;      
+      }
+      
+      footer span {
+        display: inline-block;
+        width: 20px;
+      }
+
+      footer p {
+        font-size: 10pt;
+      }
+
+      belowpage {
+        padding-top: 30px;
+        display: flex;
+        margin:auto;
+        width: 300px;
+      }
+
+      belowpage div {
+        text-align: center;
+        width: 100px;
+      }
+      
+      belowpage div a {
+        text-decoration: none;
+        color: #000000;
+      }
+
+      belowpage div.left {
+        float: left;
+      }
+
+      belowpage div.right {
+        float: right;
+      }
+
+      nav {
+        text-align:center;
+      }
+
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+        background-color: #666666;
+      }
+      
+      nav ul li {
+        float:left;
+      }
+
+      nav ul li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+      }   
+
+      nav ul li a:hover {
+        background-color: #999999;
+      }
+   
+      nav ul a {
+        color: #000000;
+        text-decoration: none;
+      }
+      
+      nav ul a:hover {
+        color: #ffffff;
+      }
+
+      content {
+        float: left;
+        left: 190px;
+        border-left: 0px solid gray;
+        padding: 1em;
+        overflow: hidden;
+        width:95%;
+      }
+      
+      iframe {
+        border-width: 0px;
+      }
+
+      section div.image-right {
+        float: right;
+      }
+
+      section div.image-left {
+        float: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1 id="pageheader">Gist Client</h1>
+      </header>
+      <nav>
+        <input type="text" id="gituserfield" /><input type="button" value="View Gists" id="viewnewuser" />
+        <span style="width:50px;"></span>
+        <select id="gituserselect">
+          <option value="NONE">Select User</option>
+          {% for thisuser in recentlist %}
+          <option value="{{ thisuser }}">{{ thisuser}}</option>
+          {% endfor %}
+        </select>
+      </nav>
+      <content>
+        <article>
+          <img src="/assets/img/progress.gif" id="progressbar" style="display:none;" />
+          <div id="pagetarget"></div>
+        </article>
+      </content>
+      <footer><div style="text-align:center;">Created by <a href="http://bng44270.github.io">bng44270</a></div></footer>
+    </div>    
+  </body>
+</html>

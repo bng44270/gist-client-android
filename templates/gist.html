@@ -1,0 +1,22 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#returntouser").click(function() {
+      $("#progressbar").show();
+      var gistuser = "{{gistuser}}";
+      var olduserreq = $.ajax({
+        url: "/getgistlist/",
+        method: "POST",
+        data: { gituserfield: gistuser}
+      }).done(function(data){ 
+        $("#progressbar").hide();
+        $("#pagetarget").html(data);
+      });
+    });
+  });
+</script>
+<input type="button" value="Return to list" id="returntouser" />
+<pre style="overflow:auto;"><code>
+{% for thisline in gisttext %}
+{{ thisline }}
+{% endfor %}
+</code></pre>
